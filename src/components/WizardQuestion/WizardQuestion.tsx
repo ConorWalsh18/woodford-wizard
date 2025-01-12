@@ -11,54 +11,89 @@ import { useState } from "react";
 
 interface AccordionProps {
   id: string;
+  questionNumber: number;
   title: string;
   content: any;
 }
 
 export default function WizardQuestion({
-  questions,
+  defaultQuestions,
 }: {
-  questions: AccordionProps[];
+  defaultQuestions: AccordionProps[];
 }) {
-  const [accordionQuestions, setAccordionQuestions] = useState(questions);
+  const [questions, setQuestions] = useState(defaultQuestions);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
 
-  const handleChoiceClick = () => {
-    setTimeout(() => {
-      const id = `panel${accordionQuestions.length + 1}`;
+  const handleChoiceClick = (questionNumberClicked: number) => {
+    if (currentQuestionNumber > questionNumberClicked) {
+      const newIndex = questionNumberClicked + 1;
 
-      setAccordionQuestions((prevQuestions) => [
-        ...prevQuestions,
-        {
-          id: id,
-          title: `Question ${prevQuestions.length + 1}`,
-          content: [
-            {
-              image: "file.svg",
-              title: `New Choice ${id}`,
-              description: `This is choice ${id}`,
-            },
-          ],
-        },
-      ]);
-    }, 1000);
+      let filteredQuestions = questions.filter(
+        (q) => q.questionNumber <= questionNumberClicked
+      );
+
+      filteredQuestions.push({
+        id: `question${newIndex}`,
+        questionNumber: newIndex,
+        title: `Question ${filteredQuestions.length + 1}`,
+        content: [
+          {
+            image: "file.svg",
+            title: `Another New Choice ${newIndex}`,
+            description: `This is choice ${newIndex}`,
+          },
+        ],
+      });
+
+      setQuestions(filteredQuestions);
+      setCurrentQuestionNumber(newIndex);
+    } else {
+      addNewQuestion();
+    }
+  };
+
+  const addNewQuestion = () => {
+    const newIndex = questions.length + 1;
+
+    setQuestions((prevQuestions) => [
+      ...prevQuestions,
+      {
+        id: `question${newIndex}`,
+        questionNumber: newIndex,
+        title: `Question ${prevQuestions.length + 1}`,
+        content: [
+          {
+            image: "file.svg",
+            title: `New Choice ${newIndex}`,
+            description: `This is choice ${newIndex}`,
+          },
+        ],
+      },
+    ]);
+
+    setCurrentQuestionNumber(newIndex);
   };
 
   return (
     <>
-      {accordionQuestions.map((accordion) => (
-        <Accordion key={accordion.id} sx={{ width: "550px" }}>
+      {questions.map((question) => (
+        <Accordion
+          key={question.id}
+          sx={{ width: "550px", backgroundColor: "#f3f3f387" }}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls={`${accordion.id}-content`}
-            id={`${accordion.id}-header`}
+            aria-controls={`${question.id}-content`}
+            id={`${question.id}-header`}
           >
-            <Typography component="span">{accordion.title}</Typography>
+            <Typography component="span">{question.title}</Typography>
           </AccordionSummary>
 
           <AccordionDetails>
-            <Stack flexDirection={"row"} gap={3}>
+            <Stack flexDirection={"row"} flexWrap={"wrap"} sx={{ gap: "26px" }}>
               <WizardChoice
-                choices={accordion.content}
+                choices={question.content}
+                questionNumber={question.questionNumber}
                 onChoiceClick={handleChoiceClick}
               />
             </Stack>

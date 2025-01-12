@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -16,19 +16,26 @@ export interface WizardChoiceObject {
 
 interface WizardChoiceProps {
   choices: WizardChoiceObject[];
-  onChoiceClick: () => void;
+  questionNumber: number;
+  onChoiceClick: (questionNumber: number) => void;
 }
 
 const WizardChoice: React.FC<WizardChoiceProps> = ({
   choices,
+  questionNumber,
   onChoiceClick,
 }) => {
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
 
+  useEffect(() => {
+    // Reset clicked index when a previous question is clicked
+    setClickedIndex(null);
+  }, [choices]);
+
   const handleClick = (index: number) => {
     setClickedIndex(index === clickedIndex ? null : index);
 
-    onChoiceClick();
+    onChoiceClick(questionNumber);
   };
 
   return (
@@ -37,6 +44,7 @@ const WizardChoice: React.FC<WizardChoiceProps> = ({
         <Tooltip key={index} title={choice.description} placement="right">
           <Card
             sx={{
+              minWidth: 155,
               maxWidth: 345,
               position: "relative",
             }}

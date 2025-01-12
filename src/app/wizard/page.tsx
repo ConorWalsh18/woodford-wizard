@@ -7,7 +7,8 @@ import WizardQuestion from "@/components/WizardQuestion/WizardQuestion";
 export default function WizardPage() {
   const [defaultQuestions, setDefaultQuestions] = useState([
     {
-      id: "panel1",
+      id: "question1",
+      questionNumber: 1,
       title: "Question 1",
       content: [
         {
@@ -27,8 +28,13 @@ export default function WizardPage() {
         },
         {
           image: "file.svg",
-          title: "Choice 3",
-          description: "This is choice 3",
+          title: "Choice 4",
+          description: "This is choice 4",
+        },
+        {
+          image: "file.svg",
+          title: "Choice 5",
+          description: "This is choice 5",
         },
       ],
     },
@@ -38,7 +44,7 @@ export default function WizardPage() {
     <Box>
       <Stack flexDirection={"row"} gap={3} flexWrap={"wrap"}>
         <Box>
-          <WizardQuestion questions={defaultQuestions} />
+          <WizardQuestion defaultQuestions={defaultQuestions} />
         </Box>
 
         <Box sx={{ minWidth: "300px" }}>
