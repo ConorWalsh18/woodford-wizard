@@ -2,74 +2,66 @@
 
 import { Box, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import WizardQuestion from "../../components/WizardQuestion/WizardQuestion";
-import WizardChoice from "@/components/WizardChoice/WizardChoice";
+import WizardQuestion from "@/components/WizardQuestion/WizardQuestion";
 
 export default function WizardPage() {
-  const [accordions, setAccordions] = useState([
+  const [defaultQuestions, setDefaultQuestions] = useState([
     {
       id: "panel1",
-      title: "Accordion 1",
+      title: "Question 1",
       content: [
         {
           image: "file.svg",
           title: "Choice 1",
           description: "This is choice 1",
-          onClick: () => onNextClick(),
         },
         {
           image: "file.svg",
           title: "Choice 2",
           description: "This is choice 2",
-          onClick: () => onNextClick(),
         },
         {
           image: "file.svg",
           title: "Choice 3",
           description: "This is choice 3",
-          onClick: () => onNextClick(),
+        },
+        {
+          image: "file.svg",
+          title: "Choice 3",
+          description: "This is choice 3",
         },
       ],
     },
   ]);
 
-  const onNextClick = () => {
-    setTimeout(() => {
-      console.log("Mock API call completed");
-
-      const id = `panel${accordions.length + 1}`;
-
-      setAccordions((prevAccordions) => [
-        ...prevAccordions,
-        {
-          id: id,
-          title: `Accordion ${prevAccordions.length + 1}`,
-          content: [
-            {
-              image: "file.svg",
-              title: "New Choice",
-              description: "This is from the next click",
-              onClick: onNextClick,
-            },
-          ],
-        },
-      ]);
-    }, 2000); // Mock API call delay
-  };
-
-  console.log(accordions);
-
   return (
     <Box>
-      <Stack flexDirection={"row"} gap={3}>
+      <Stack flexDirection={"row"} gap={3} flexWrap={"wrap"}>
         <Box>
-          {accordions.map((accordion) => (
-            <WizardQuestion key={accordion.id} accordion={accordion} />
-          ))}
+          <WizardQuestion questions={defaultQuestions} />
         </Box>
 
-        <Box>
-          <Typography variant="h4">Sidebar</Typography>
+        <Box sx={{ minWidth: "300px" }}>
+          <Box
+            position={"fixed"}
+            sx={{
+              minWidth: "300px",
+              borderRadius: "12px",
+              backgroundColor: "#c9c9c9",
+              padding: "16px",
+            }}
+          >
+            <Box
+              sx={{
+                minHeight: "400px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="h4">Sidebar</Typography>
+            </Box>
+          </Box>
         </Box>
       </Stack>
     </Box>

@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             display="flex"
             justifyContent="center"
             alignItems="flex-start"
-            minHeight="100vh"
+            minHeight="calc(100vh - 64px)"
             paddingTop={2}
           >
             <ThemeRegistry>{children}</ThemeRegistry>

@@ -12,19 +12,23 @@ export interface WizardChoiceObject {
   image: string;
   title: string;
   description: string;
-  onClick: () => void;
 }
 
 interface WizardChoiceProps {
   choices: WizardChoiceObject[];
+  onChoiceClick: () => void;
 }
 
-const WizardChoice: React.FC<WizardChoiceProps> = ({ choices }) => {
+const WizardChoice: React.FC<WizardChoiceProps> = ({
+  choices,
+  onChoiceClick,
+}) => {
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
 
-  const handleClick = (index: number, onClick: any) => {
+  const handleClick = (index: number) => {
     setClickedIndex(index === clickedIndex ? null : index);
-    onClick();
+
+    onChoiceClick();
   };
 
   return (
@@ -36,7 +40,7 @@ const WizardChoice: React.FC<WizardChoiceProps> = ({ choices }) => {
               maxWidth: 345,
               position: "relative",
             }}
-            onClick={() => handleClick(index, choice.onClick)}
+            onClick={() => handleClick(index)}
           >
             <CardMedia sx={{ height: 140 }} image={choice.image} />
 
